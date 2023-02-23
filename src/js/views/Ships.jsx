@@ -1,31 +1,49 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import "../../styles/index.css";
 import { Context } from "../store/appContext.js"
 import { Link } from "react-router-dom";
 
 const ShipCards = () => {
+	const [aux, setaux] = useState("")
 	const { store, actions } = useContext(Context)
-	let aux = store.ships
-	console.log(aux)
+			
+	//Comprobar localStorage
+	const Checker = () => {
+		if  (!localStorage.getItem("ships")) {
+				setTimeout(function(){Checker()}, 100)
+		}
+		else {
+			setaux(JSON.parse(localStorage.getItem("ships")))
+		}
+	}
+
+	//Cargar localStorage
+	if (aux == "") {
+		Checker()
+	}
 	
-	const handleOnErrorImg = (e) => {
-        e.target.src = "https://i.imgur.com/LDIprFD.png";
-    }
-	//Inclusión de las tarjetas
+	//Cargar el Store para hacer funcionar los favoritos
+	let prev = store.Favorites
+
+	//Inclusión de las tarjetas.
 	let inside = ""
 	if (Array.isArray(aux)) {
-		 inside = aux.map((e, i) => <div className="card m-1 bg-black" key={i}>
-		<img src={"https://starwars-visualguide.com/assets/img/starships/"+e.uid+".jpg"} onError={handleOnErrorImg} className="card-img-top" alt="..."/>
+		 inside = aux.map((e, i) => <div className="card m-1 bg-black" key={"S"+i}>
+		<img src={"https://starwars-visualguide.com/assets/img/starships/"+actions.getUID(e, "starships")+".jpg"} onError={actions.getLoad} className="card-img-top" alt="..."/>
 		<div className="card-body  d-flex flex-column">
 	  	<h5 className="card-title">{e.name}</h5>
-	  	<div className="mt-auto"><Link to={"/ships/"+i} className="btn btn-primary">Details</Link></div>
+	  	<div className="mt-auto d-inline-flex justify-content-between">
+			<Link to={"/ships/"+i} className="btn btn-primary">Details</Link>
+			<button className={"btn btn-outline-warning shadow-none" + (actions.checkFav("S"+i, prev) ? " active" : "")} data-bs-toggle="button" aria-pressed={actions.checkFav("S"+i, prev) ? "True" : "False"} onClick={() => {actions.setFav("S"+i, prev, e.name, "ships", i)}}><i className="far fa-heart fa-lg"></i></button>
+			</div>
 		</div>
   	</div>)}
+
 
 return (
 	<div className="bod overflow-x-scroll">
 		<div className="overflow-x-scroll d-inline-flex">
-		{inside}
+		{aux == "" ? store.Loader : inside}
 		</div>
 	</div>
 )}

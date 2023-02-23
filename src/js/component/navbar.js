@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { Context } from "../store/appContext.js"
 
 export const Navbar = () => {
+  const { store, actions } = useContext(Context)
+  
+  let lista = store.Favorites
+  let inside = lista.map((e, i) => 
+    <li key={i}><Link to={e.Type+"/"+e.To} className="dropdown-item" href="#">
+      {e.Name}
+    </Link></li>
+  )
+
   return (
     <nav className="navbar navbar-expand-lg bg-black fixed-top">
       <div className="container-fluid row justify-content-between p-0 ps-2">
@@ -41,27 +51,10 @@ export const Navbar = () => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                Dropdown
+                Favorites
               </a>
               <ul className="dropdown-menu">
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Action
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Another action
-                  </a>
-                </li>
-                <li>
-                  <hr className="dropdown-divider" />
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Something else here
-                  </a>
-                </li>
+                {inside}
               </ul>
             </li>
           </ul>

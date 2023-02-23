@@ -1,39 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useContext } from "react";
 import "../../styles/index.css";
 import { useLocation } from "react-router-dom";
+import { Context } from "../store/appContext.js"
 import "../../styles/index.css";
 
 function CharDetails() {
-  var location = useLocation();
-  location = location.pathname.slice(-1)[0]
-  location = parseInt(location)
+  let [aux, setaux] = useState("")	
+	const { store, actions } = useContext(Context)
 
-  //Fetch info
-  const [aux, setAux] = useState({})
-  // const getInfo = () => {
-  //   var requestOptions = {
-  //     method: 'GET',
-  //     redirect: 'follow'
-  //   };
-    
-  //   fetch("https://www.swapi.tech/api/people/"+(location +1), requestOptions)
-  //     .then(response => response.json())
-  //     .then(result => setAux(result.result.properties),
-  //       console.log(aux))
-  //     .catch(error => console.log('error', error));
-    
+    // Localizamos la ruta abierta por el usuario para ajustar el ID en el JSON
+    let location = useLocation();
+      location = location.pathname.split('/characters/')
+      location = parseInt(location[1])
 
-  // }
-  // useEffect(() => {
-  //   getInfo()
-  // }, []);
+    //Comprobar localStorage
+    const Checker = () => {
+      if  (!localStorage.getItem("characters")) {
+          setTimeout(function(){Checker()}, 100)
+      }
+      else {
+        setaux(JSON.parse(localStorage.getItem("characters"))[location])
+      }
+    }
+
+    //Cargar localStorage
+    let imgUID = ""
+    if (aux == "") {
+      Checker()
+    }
+    else {
+      imgUID = actions.getUID(aux, "people")
+    }
 
   return (
     <div className="container-fluid bod d-inline-flex justify-content-center">
       <div className="card mcard bg-dark mb-3">
         <div className="row g-0">
           <div className="col-md-4">
-            <img src={"https://starwars-visualguide.com/assets/img/characters/"+(location+1)+".jpg"} className="img-fluid rounded-start" alt="..." />
+            <img src={"https://starwars-visualguide.com/assets/img/characters/"+imgUID+".jpg"} onError={actions.getLoad} className="img-fluid rounded-start" alt="..." />
           </div>
             <div className="card-body col-md-8 d-flex flex-column">
                 <h5 className="card-title">{aux.name}</h5>
@@ -43,9 +47,9 @@ function CharDetails() {
                  <ul className="list-group list-group-flush">
                   <li className="lis">Height: {aux.height}</li>
                   <li className="lis">Mass: {aux.mass}</li>
-                  <li className="lis">Eye color: {aux.eye_color}</li>
-                  <li className="lis">Birth year: {aux.birth_year}</li>
                   <li className="lis">Hair color: {aux.hair_color}</li>
+                  <li className="lis">Birth Year: {aux.birth_year}</li>
+                  <li className="lis">Gender: {aux.gender}</li>
                 </ul>
               <p className="card-footer text-end mt-auto">
                 <small className="text-muted">May the Force be with you</small>
