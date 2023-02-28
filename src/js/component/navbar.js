@@ -4,7 +4,7 @@ import { Context } from "../store/appContext.js"
 
 export const Navbar = () => {
   const { store, actions } = useContext(Context)
-  
+
   let lista = store.Favorites
   let inside = lista.map((e, i) => 
     <li key={i}><Link to={e.Type+"/"+e.To} className="dropdown-item" href="#">

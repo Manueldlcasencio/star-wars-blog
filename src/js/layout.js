@@ -31,7 +31,7 @@ const Layout = () => {
 						<Route path="/characters" element={<CharCards/>} />
 						<Route path="/characters/:theid" element={<CharDetails />} />
 						<Route path="/planets" element={<PlanCards />} />
-						<Route path="/planets/:theid" element={<PlanDetails />} />
+						<Route path="/planets/:theid"  element={<PlanDetails />} />
 						<Route path="/ships" element={<ShipCards/>} />
 						<Route path="/ships/:theid" element={<ShipDetails />} />
 						<Route path="*" element={<h1 className="bod">Not found!</h1>} />

@@ -6,6 +6,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			Loader: <h3 className="mx-3">Loading...</h3>,
 			Favorites: [],
+			
 		},
 		actions: {
 			getFetch: () => {
@@ -58,7 +59,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					prev.splice(checker, 1)
 					setStore({Favorites: prev})
 				}
-				// const pos = myArray.map(e => e.hello).indexOf('stevie');
 				else {
 					let temp = []
 					temp = [...temp, ...prev, data]
@@ -72,7 +72,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return true}
 				else {
 					return false}				
-			}
+			},
 		}}
 	};
 
