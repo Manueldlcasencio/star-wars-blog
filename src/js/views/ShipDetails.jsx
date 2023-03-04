@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "../../styles/index.css";
 import { useLocation } from "react-router-dom";
 import { Context } from "../store/appContext.js"
@@ -32,6 +32,11 @@ function ShipDetails() {
     else {
       imgUID = actions.getUID(aux, "starships")
     }
+
+    //Recarga en caso de cambiar el favorito
+    useEffect(()=>{
+      setaux(JSON.parse(localStorage.getItem("ships"))[location])
+    }, [location])
 
   return (
     <div className="container-fluid bod d-inline-flex justify-content-center">
